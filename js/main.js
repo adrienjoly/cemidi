@@ -69,7 +69,7 @@
 			else {
 				console.log("loading", fileName, "...");
 				$.ajax({
-					url: "/templates/"+fileName+".html",
+					url: "templates/"+fileName+".html",
 					complete: function(r) {
 						//console.log("ajax", r.responseText);
 						that.templates[fileName] = r.responseText;
