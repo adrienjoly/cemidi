@@ -1,22 +1,7 @@
 (function(){
 
-	function LocalDataSource() {
-		this.meals = [
-			{ name:"côtes d'agneau purée", price:9, rNm: "chez tony", rId:"001", rLoc:[1,2] },
-			{ name:"langue de boeuf petits pois", price:13, rNm: "l'imprévu", rId:"002", rLoc:[1,2] },
-			{ name:"tartare de saumon", price:10, rNm: "chez tony", rId:"003", rLoc:[1,2] },
-			{ name:"saucisse lentilles", price:3.50, rNm:"R.U.", rId:"004", rLoc:[48.76278, 2.28781] },
-		];
-	}
-
-	LocalDataSource.prototype.fetch = function(p, cb) {
-		cb({
-			meals: this.meals
-		});
-	}
-
-
 	var getCurrentLoc = function(cb) {
+		console.log("get current loc...");
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
 				var coords = position.coords || position.coordinate || position;
@@ -52,10 +37,42 @@
 	    var radlon2 = Math.PI * loc2[1]/180;
 	    var radtheta = Math.PI * (loc1[1]-loc2[1])/180;
 	    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-	    var kmDist = Math.acos(dist) * 180/Math.PI * 60 * 1.1515 * 0.8684;
-	    return kmDist < 1 ? Math.floor(kmDist*1000) + " m" : Math.floor(kmDist) + " km"; 
-
+	    return Math.acos(dist) * 180/Math.PI * 60 * 1.1515 * 0.8684;
 	}
+
+	// DATA -----------------------------------
+
+	function LocalDataSource() {
+		this.meals = [
+			{ name:"côtes d'agneau purée", price:9, rNm: "chez tony", rId:"001", rLoc:[1,2] },
+			{ name:"langue de boeuf petits pois", price:13, rNm: "l'imprévu", rId:"002", rLoc:[1,2] },
+			{ name:"tartare de saumon", price:10, rNm: "chez tony", rId:"003", rLoc:[1,2] },
+			{ name:"saucisse lentilles", price:3.50, rNm:"R.U.", rId:"004", rLoc:[48.76278, 2.28781] },
+		];
+	}
+
+	LocalDataSource.prototype.sortByDistance = function(currentLoc) {
+		var meals = this.meals.slice();
+		for (var i in meals)
+			meals[i].distance = distance(meals[i].rLoc, /*p.loc*/currentLoc.loc);
+		meals.sort(function(a,b) {
+			return a.distance - b.distance;
+		});
+		for (var i in meals)
+			meals[i].distance =  meals[i].distance < 1 ? Math.floor(meals[i].distance*1000) + " m" : Math.floor(meals[i].distance) + " km";
+		return meals;
+	}
+
+	LocalDataSource.prototype.fetch = function(p, cb) {
+		console.log("fetch...", currentLoc);
+		if (/*p && p.loc*/ currentLoc)
+			cb({ meals: this.sortByDistance(currentLoc) });
+		else
+			cb({ meals: this.meals });
+	}
+
+
+	// TEMPLATE LOADER -----------------------------------
 
 	function TemplateLoader() {
 		this.templates = {}
@@ -80,15 +97,13 @@
 		};
 	}
 
+	// MAIN UI/LOGIC -----------------------------------
+
 	var render = new TemplateLoader();
-	var currentLoc = {loc:[48.76562, 2.28850]}; // ecole centrale
+	var currentLoc = null; //{loc:[48.76562, 2.28850]}; // ecole centrale
 
 	function refreshMeals(res) {
 		//console.log("res", res);
-		if (currentLoc && currentLoc.loc)
-			for (var i in res.meals) {
-				res.meals[i].distance = distance(res.meals[i].rLoc, currentLoc.loc);
-			}
 		render("meals", res, function(html) {
 			document.getElementById("meals").innerHTML = html; //Mustache.render(template, res);
 		});
@@ -97,13 +112,13 @@
 	window.onLoad = function() {
 		console.log("-= cemidi.fr =-");
 		var dataSource = new LocalDataSource();
-		/*
+		
 		getCurrentLoc(function(loc){
-			console.log(loc)
+			console.log("loc", loc)
 			currentLoc = loc;
-
+			dataSource.fetch({loc:currentLoc}, refreshMeals); // refresh the list (closest restaurants first)
 		});
-		*/
+		
 		dataSource.fetch({loc:currentLoc}, refreshMeals);
 	}
 })();
