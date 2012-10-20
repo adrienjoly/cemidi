@@ -41,6 +41,12 @@ li {
 	overflow: hidden;
 }
 
+li > a {
+	overflow: auto;
+	display: block;
+	border: none;
+}
+
 .thumb {
 	float: left;
 	width: 60px;

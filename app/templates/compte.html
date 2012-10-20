@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>cemidi.fr</title>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+	<style>
+		form * {
+			display: block;
+			width: 100%;
+		}
+		form p {
+			margin: 0;
+		}
+		form input[type=text] {
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+<body class="pgNewVenue">
+	<h1>nouveau restaurant</h1>
+	<form onsubmit="onSubmit()">
+		<p>Nom du restaurant</p>
+		<input type="text" name="rNm">
+		<p>Adresse</p>
+		<input type="text" name="addr">
+		<input type="hidden" name="lat">
+		<input type="hidden" name="long">
+		<p>Téléphone</p>
+		<input type="text" name="tel">
+		<p>Email</p>
+		<input type="text" name="email">
+		<p>URL Photo</p>
+		<input type="text" name="img">
+		<p>Site web</p>
+		<input type="text" name="url">
+		<input type="submit">
+	</form>
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+	<script src="js/resto.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
