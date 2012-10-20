@@ -1,0 +1,31 @@
+ul {
+	list-style: none;
+	padding: 0;
+}
+
+li {
+	position: relative;
+	border: 1px solid gray;
+}
+
+.meal {
+	font-weight: bold;
+}
+
+.restaurant {
+	font-size: 11px;
+	color: gray;
+}
+
+.distance {
+	font-size: 11px;
+	color: gray;
+	font-weight: bold;
+}
+
+.price {
+	position: absolute;
+	top: 0;
+	right: 0;
+	color: red;
+}
