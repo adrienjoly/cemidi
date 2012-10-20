@@ -125,6 +125,9 @@
 		//console.log("res", res);
 		render("meals", res, function(html) {
 			document.getElementById("meals").innerHTML = html; //Mustache.render(template, res);
+			$("li").each(function(){
+				$(this).css("transform", "rotate("+((Math.random()-0.5)*6*Math.random())+"deg)");
+			});
 		});
 	}
 

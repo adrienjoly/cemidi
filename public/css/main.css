@@ -35,16 +35,26 @@ ul {
 
 li {
 	position: relative;
-	border: 1px solid gray;
+	border: 5px solid #7D6D5B;
 	margin-bottom: 5px;
 	padding: 5px;
 	overflow: hidden;
+	background: url(/img/ardoise.jpg);
+	border-radius: 8px;
+}
+
+li:hover {
+	transform: rotate(0deg) !important;
+	-webkit-transform: rotate(0deg) !important;
+	transition: transform 0.2s;
+	-webkit-transition: -webkit-transform 0.2s;
 }
 
 li > a {
 	overflow: auto;
 	display: block;
 	border: none;
+	text-decoration: none;
 }
 
 .thumb {
@@ -53,22 +63,24 @@ li > a {
 	height: 60px;
 	background-size: cover;
 	margin-right: 10px;
+	border-radius: 8px;
 }
 
 .meal {
 	font-family: 'Cookie', cursive;
 	/*font-weight: bold;*/
-	font-size: 20px;
+	font-size: 24px;
+	color: white;
 }
 
 .restaurant {
-	font-size: 11px;
-	color: gray;
+	font-size: 14px;
+	color: white;
 }
 
 .distance {
-	font-size: 11px;
-	color: gray;
+	font-size: 14px;
+	color: white;
 	font-weight: bold;
 }
 
@@ -76,5 +88,5 @@ li > a {
 	position: absolute;
 	top: 5px;
 	right: 5px;
-	color: red;
+	color: #fdd;
 }

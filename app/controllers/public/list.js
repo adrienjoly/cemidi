@@ -1,5 +1,5 @@
 /**
- * store a restaurant and update its current meal
+ * api: list of restaurants
  * @author adrienjoly, whyd
  */
 
@@ -11,7 +11,7 @@ exports.controller = function(request, reqParams, response)
 	
 	mongodb.collections["restaurant"].find(function(err, cur) {
 		cur.toArray(function(err, items){
-			console.log(items);
+			//console.log(items);
 			response.render({meals: items});
 		});
 	});
