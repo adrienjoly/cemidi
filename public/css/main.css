@@ -1,0 +1,74 @@
+/*
+body {
+	position: relative;
+	width: 100%;
+	overflow-x: hidden;
+	padding: 0;
+	margin: 0;
+}
+*/
+
+h1 {
+	margin: 5px;
+	font-size: 18px;
+}
+
+#pro {
+	position: absolute;
+	top: 0;
+	right: 0;
+	color: gray;
+	margin: 5px;
+	font-size: 11px;
+}
+
+#meals > img {
+	display: block;
+	width: 24px;
+	margin: 0 auto;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+}
+
+li {
+	position: relative;
+	border: 1px solid gray;
+	margin-bottom: 5px;
+	padding: 5px;
+	overflow: hidden;
+}
+
+.thumb {
+	float: left;
+	width: 60px;
+	height: 60px;
+	background-size: cover;
+	margin-right: 10px;
+}
+
+.meal {
+	font-family: 'Cookie', cursive;
+	/*font-weight: bold;*/
+	font-size: 20px;
+}
+
+.restaurant {
+	font-size: 11px;
+	color: gray;
+}
+
+.distance {
+	font-size: 11px;
+	color: gray;
+	font-weight: bold;
+}
+
+.price {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	color: red;
+}
