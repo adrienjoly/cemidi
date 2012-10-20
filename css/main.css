@@ -7,6 +7,21 @@ body {
 	margin: 0;
 }
 */
+
+h1 {
+	margin: 5px;
+	font-size: 18px;
+}
+
+#pro {
+	position: absolute;
+	top: 0;
+	right: 0;
+	color: gray;
+	margin: 5px;
+	font-size: 11px;
+}
+
 #meals > img {
 	display: block;
 	width: 24px;
@@ -21,6 +36,8 @@ ul {
 li {
 	position: relative;
 	border: 1px solid gray;
+	margin-bottom: 5px;
+	padding: 5px;
 }
 
 .meal {
@@ -40,7 +57,7 @@ li {
 
 .price {
 	position: absolute;
-	top: 0;
-	right: 0;
+	top: 5px;
+	right: 5px;
 	color: red;
 }
