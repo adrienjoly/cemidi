@@ -8,47 +8,53 @@ var templateLoader = require("../../templates/templateLoader.js");
 
 var templateFile = "./app/templates/compte.html";
 
-var attributes = ["rNm", "addr", "tel", "url", "img"];
+var attributes = ["rNm", "addr", "tel", "email", "url", "img"];
 
-exports.controller = function(request, reqParams, response)
-{
+exports.controller = function(request, reqParams, response) {
 	request.logToConsole("compte.controller", reqParams);
 
-	if (!reqParams)
+	function renderResto(item) {
 		templateLoader.loadTemplate(templateFile, function(template) {
-			response.render(template.render(), null, {'content-type': 'text/html'});
-		});
-	else if (reqParams.id)
-		mongodb.collections["restaurant"].findOne({_id: mongodb.ObjectId(reqParams.id)}, function(err, item) {
-			if (item)
-				templateLoader.loadTemplate(templateFile, function(template) {
-					for (var i in params)
-						item[i] = params[i];
-					item.long = item.loc[0];
-					item.lat = item.loc[1];
-					response.render(template.render(item), null, {'content-type': 'text/html'});
-				});
-			else
-				response.render("not found");	
-		});
-	else if (reqParams._id) {
-		var set = {
-			loc: [reqParams.long, reqParams.lat]
-		};
-		for (var i in attributes)
-			set[i] = attributes[i];
-		mongodb.collections["restaurant"].update({_id: mongodb.ObjectId(reqParams._id)}, {$set:set}, function(err, item) {
-			if (item)
-				templateLoader.loadTemplate(templateFile, function(template) {
-					item.long = item.loc[0];
-					item.lat = item.loc[1];
-					response.render(template.render(item), null, {'content-type': 'text/html'});
-				});
-			else
-				response.render("not found");	
+			if (item.loc) {
+				item.long = item.loc[0];
+				item.lat = item.loc[1];
+			}
+			response.render(template.render(item), null, {'content-type': 'text/html'});
 		});
 	}
-	else
-		response.badRequest();
 
+	if (!reqParams) // => empty form (new account)
+		renderResto({});
+	else if (reqParams.id) // => show form for existing account
+		mongodb.collections["restaurant"].findOne({_id: mongodb.ObjectId(reqParams.id)}, function(err, item) {
+			if (item)
+				renderResto(item);
+			else
+				response.render("not found");	
+		});
+	else if (reqParams.rNm) { // => save account
+		var criteria = reqParams._id ? { _id: mongodb.ObjectId(reqParams._id) } : { rNm: reqParams.rNm };
+		var set = { loc: [reqParams.long, reqParams.lat] };
+		for (var i in attributes)
+			if (reqParams[attributes[i]])
+				set[attributes[i]] = reqParams[attributes[i]];
+		mongodb.collections["restaurant"].update(criteria, {$set:set}, {upsert:true}, function(err, item) {
+			if (err || !item) {
+				console.log("error", err);
+				item = item || {};
+				item.error = "unable to save this restaurant, try again!";
+				response.render(item);
+			}
+			else
+				mongodb.collections["restaurant"].findOne(criteria, function(err, item) {
+					item = item || {};
+					if (err)
+						item.error = err;
+					if (item._id)
+						item.redirect = "/plat/" + item._id;
+					response.render(item);
+				});
+				//response.temporaryRedirect("/plat/" + item._id);	
+		});
+	}
 }
